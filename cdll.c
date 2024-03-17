@@ -24,12 +24,12 @@ void print(struct Llist* L){
 		return;
 	}
 	struct node* temp = L -> tail -> rlink;
-	printf("\nList is :");
+	printf("\nList is : ↓ ");
 	while(temp -> rlink != L -> tail -> rlink){
-		printf("%d<-->",temp -> data);
+		printf("%d ↔ ",temp -> data);
 		temp = temp ->rlink;
 	}
-	printf("%d<--^\n",temp -> data);
+	printf("%d ↑ \n",temp -> data);
 }
  void insertFront(struct Llist* L, int x){
  	struct node* newnode = getnode(x);
@@ -114,77 +114,90 @@ void deleteFront(struct Llist* L){
 	    }
     }
 }
-// void insertByOrder(struct Llist*  L, int val){
-//     struct node* newnode = getnode(val);
-//     struct node* current = L -> tail;
-//     struct node* previous = NULL;
-//     if(L -> tail == NULL){
-//         L -> tail = newnode;
-//         return;
-//     }
-//     else{
-//         if(current -> rlink == NULL && current -> data >= val){
-//             newnode -> rlink = current;
-//             current -> llink = newnode;
-//             L ->tail = newnode;
-//             return;
-//         }
-//         if(current -> rlink != NULL && current -> data >= val){
-//             newnode -> rlink = current;
-//             current -> llink = newnode;
-//             L ->tail = newnode;
-//             return;
-//         }
-//         while(current -> data < val && current -> rlink != NULL){
-//             previous = current;
-//             current = current -> rlink;
-//         }
-//         if(current -> data < val && current -> rlink == NULL){
-//             current -> rlink = newnode;
-//             newnode -> llink = current;
-//             return; 
-//         }
-//         previous -> rlink = newnode;
-//         newnode -> rlink = current;
-//         current -> llink = newnode;
-//         newnode -> llink = previous;
-//     }
-// }
-// void searchByKey(struct Llist* L, int key){
-// 	int pos = 1;
-// 	struct node* current = L -> tail;
-// 	if(L -> tail == NULL){
-// 		return;
-// 	}
-//     else{
-//         if(pos <= count){
-//         if(current -> rlink == NULL && current -> data == key){
-//             printf("%d is found at %d\n",key,pos);
-//             return;
-//         }
-//         if(current -> rlink == NULL && current -> data != key){
-//             printf("%d is not in the List\n",key);
-//             return;
-//         }
-//         while(current -> data != key && current -> rlink != NULL){
-//             current = current -> rlink;
-//             pos++;
-//         }
-//         if(current -> data == key){
-//             printf("%d is found at %d position\n",key,pos);
-//             return;
-//         }
-//         if(current -> data != key && current -> rlink == NULL){
-//             printf("\n%d is not in the List\n",key);
-//             return;
-//         }
-//         }
-//         else{
-//             printf("\n%d is not in the List\n",key);
-//             return;
-//         }
-//     }
-// }
+void insertByOrder(struct Llist*  L, int val){
+    struct node* newnode = getnode(val);
+    struct node* current = L -> tail;
+    struct node* previous = NULL;
+    if(L -> tail == NULL){
+        L -> tail = newnode;
+		newnode -> rlink = newnode;
+		newnode -> llink = newnode;
+        return;
+    }
+    else{
+        if(current -> rlink == current && current -> data <= val){
+            current -> rlink = newnode;
+			newnode -> llink = current;
+			newnode -> rlink = current;
+            current -> llink = newnode;
+			L ->tail = newnode;
+            return;
+        }
+        if(current -> rlink == current  && current -> data > val){
+            newnode -> rlink = current;
+            current -> llink = newnode;
+			newnode -> llink = current;
+			current -> rlink = newnode;
+            L ->tail = current;
+            return;
+        }
+		current = current -> rlink;
+        while(current -> data < val && current -> rlink != L -> tail -> rlink ){
+            previous = current;
+            current = current -> rlink;
+        }
+        if(current -> data < val && current -> rlink == L -> tail -> rlink){
+            newnode -> llink = current;
+			newnode -> rlink = L -> tail -> rlink;
+			current -> rlink = newnode;
+			L -> tail = newnode;
+            return; 
+        }
+		if(current -> data > val && current -> llink == L -> tail){
+			newnode -> rlink = current;
+			current -> llink = newnode;
+			newnode -> llink = L -> tail;
+			L -> tail -> rlink = newnode;
+			return;
+		}
+        previous -> rlink = newnode;
+        newnode -> rlink = current;
+        current -> llink = newnode;
+        newnode -> llink = previous;
+		return;
+    }
+}
+void searchByKey(struct Llist* L, int key){
+	int pos = 1;
+	struct node* current = L -> tail;
+	if(L -> tail == NULL){
+		return;
+	}
+    else{
+		if(pos <= count){
+        if(current -> rlink == current && current -> data == key){
+            printf("%d is found at %d\n",key,pos);
+            return;
+        }
+        if(current -> rlink == current && current -> data != key){
+            printf("%d is not in the List\n",key);
+            return;
+        }
+		current = current -> rlink;
+        while(current -> data != key && current -> rlink != current ){
+            current = current -> rlink;
+            pos++;
+        }
+        if(current -> data == key){
+            printf("%d is found at %d position\n",key,pos);
+            return;
+        }
+        if(current -> data != key && current -> rlink == L -> tail -> rlink){
+            printf("\n%d is not in the List\n",key);
+            return;
+        }
+	}
+}
 void searchByPosition(struct Llist* L , int spos){
     int pos = 1;
     if(L -> tail == NULL){
@@ -380,11 +393,11 @@ void main(){
 		case 4: deleteRear(L);
 				print(L);
 				break;
-		// case 5: printf("Enter the element:");
-		// 		scanf("%d",&ele);
-		// 		insertByOrder(L,ele);
-		// 		print(L);
-		// 		break;
+		case 5: printf("Enter the element:");
+				scanf("%d",&ele);
+				insertByOrder(L,ele);
+				print(L);
+				break;
 		// case 6: printf("Enter the element:");
 		// 		scanf("%d",&ele);
 		// 		printf("Enter the Positon:");
@@ -402,11 +415,11 @@ void main(){
 		// 		deleteByKey(L,ele);
 		// 		print(L);
 		// 		break;
-		// case 9: printf("Enter the element:");
-		// 		scanf("%d",&ele);
-		// 		searchByKey(L,ele);
-		// 		//print(L);
-		// 		break;
+		case 9: printf("Enter the element:");
+				scanf("%d",&ele);
+				searchByKey(L,ele);
+				//print(L);
+				break;
 		case 10: printf("Enter the Positon:");
 				scanf("%d",&ele);
 				searchByPosition(L,ele);
@@ -420,4 +433,5 @@ void main(){
 		}
 	}while(choice != -1);
 	free(L);
+}
 }
