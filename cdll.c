@@ -230,12 +230,8 @@ void searchByPosition(struct Llist* L , int spos){
             return;
         }
         }
-        else{
-            printf("\n%d position is out of list\n",spos);
+	   printf("\n%d position is out of list\n",spos);
             return;
-        }
-    
-
 }
 // void insertByPosition(struct Llist* L, int x, int spos){
 // 	int pos = 1;
@@ -368,7 +364,7 @@ void searchByPosition(struct Llist* L , int spos){
 // 		return;
 // 	}
 // }
-void main(){
+int main(){
 	struct Llist* L;
 	L = (struct Llist*) malloc (sizeof(struct Llist));
 	printf("\n==========\n1.Insert Front\n2.Insert Rear\n3.Delete Front\n4.Delete Rear\n5.Insert by Order\n6.Insert by position\n7.Delete by positon\n8.Delete by key\n9.Search by key\n10.Search by Position\n11.Print\n-1.Exit\n==========\n");
